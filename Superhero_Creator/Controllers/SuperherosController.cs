@@ -19,13 +19,52 @@ namespace Superhero_Creator.Controllers
         // GET: Superheros
         public ActionResult Index()
         {
-            return View();
+            var allHeros = db.Superheros.Where(h => true);
+            return View(allHeros);
         }
 
         public ActionResult Create()
         {
             Superhero newHero = new Superhero();
             return View(newHero);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            return View(db.Superheros.Where(s => s.ID == id).Single());
+        }
+
+        public ActionResult Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var heroToDelete = db.Superheros.Where(s => s.ID == id).Single();
+                db.Superheros.Remove(heroToDelete);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Error");
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Superhero editedHero)
+        {
+            if (ModelState.IsValid)
+            {
+                var heroToEdit = db.Superheros.Where(s => s.ID == editedHero.ID).Single();
+                heroToEdit.Name = editedHero.Name;
+                heroToEdit.AlterEgoName = editedHero.AlterEgoName;
+                heroToEdit.PrimaryAbility = editedHero.PrimaryAbility;
+                heroToEdit.SecondaryAbility = editedHero.SecondaryAbility;
+                heroToEdit.CatchPhrase = editedHero.CatchPhrase;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Error");
         }
 
         [HttpPost]
