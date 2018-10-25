@@ -26,5 +26,9 @@ namespace Superhero_Creator.Controllers
 
             return View();
         }
+        public ActionResult Error()
+        {
+            return View();
+        }
     }
 }

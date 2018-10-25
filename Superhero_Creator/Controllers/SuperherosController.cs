@@ -29,27 +29,23 @@ namespace Superhero_Creator.Controllers
             return View(newHero);
         }
 
-        public ActionResult Edit(int id)
-        {
-            return View(db.Superheros.Where(s => s.ID == id).Single());
-        }
-
-        public ActionResult Details(int id)
-        {
-            return View(db.Superheros.Where(s => s.ID == id).Single());
-        }
-        public ActionResult Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Name,AlterEgo,AlterEgoName,PrimaryAbility,SecondaryAbility,CatchPhrase")] Superhero newHero)
         {
             if (ModelState.IsValid)
             {
-                var heroToDelete = db.Superheros.Where(s => s.ID == id).Single();
-                db.Superheros.Remove(heroToDelete);
+                db.Superheros.Add(newHero);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Error");
+            return RedirectToAction("Error", "Home");
+        }
 
+        public ActionResult Edit(int id)
+        {
+            return View(db.Superheros.Where(s => s.ID == id).Single());
         }
 
         [HttpPost]
@@ -68,21 +64,26 @@ namespace Superhero_Creator.Controllers
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Error");
+            return RedirectToAction("Error", "Home");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,AlterEgo,AlterEgoName,PrimaryAbility,SecondaryAbility,CatchPhrase")] Superhero newHero)
+        public ActionResult Details(int id)
+        {
+            return View(db.Superheros.Where(s => s.ID == id).Single());
+        }
+        public ActionResult Delete(int id)
         {
             if (ModelState.IsValid)
             {
-                db.Superheros.Add(newHero);
+                var heroToDelete = db.Superheros.Where(s => s.ID == id).Single();
+                db.Superheros.Remove(heroToDelete);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Error");
-        }
+            return RedirectToAction("Error", "Home");
+
+        }  
+        
     }
 }
