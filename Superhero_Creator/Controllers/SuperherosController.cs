@@ -34,6 +34,10 @@ namespace Superhero_Creator.Controllers
             return View(db.Superheros.Where(s => s.ID == id).Single());
         }
 
+        public ActionResult Details(int id)
+        {
+            return View(db.Superheros.Where(s => s.ID == id).Single());
+        }
         public ActionResult Delete(int id)
         {
             if (ModelState.IsValid)
